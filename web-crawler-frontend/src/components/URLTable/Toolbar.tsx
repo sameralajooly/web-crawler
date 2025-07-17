@@ -44,6 +44,7 @@ const Toolbar = ({ selectedIds, loadUrls }: Props) => {
         <button
           onClick={handleDelete}
           disabled={loading || selectedIds.length === 0}
+          name="delete-btn"
           className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded shadow disabled:opacity-50 transition"
         >
           Delete Selected

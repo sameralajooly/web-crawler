@@ -46,6 +46,7 @@ const URLForm = ({ onCrawl }: Props) => {
         {formError && <p className="text-red-600 text-sm">{formError}</p>}
         <button
           type="submit"
+          name="crawl-btn"
           className="mt-2 bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition"
         >
           Crawl

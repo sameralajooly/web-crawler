@@ -21,13 +21,14 @@ const TableRow = ({ paginatedUrls, selectedIds, toggleSelect }: Props) => {
     >
       <td className="p-3" onClick={(e) => e.stopPropagation()}>
         <input
+          id={`checkbox-${url.id}`}
           type="checkbox"
           checked={selectedIds.includes(url.id)}
           onChange={() => toggleSelect(url.id)}
           onClick={(e) => e.stopPropagation()}
         />
       </td>
-      <td className="p-3 md:w-1/6">{url.title}</td>
+      <td className="p-3 md:w-1/6">{url.title || url.url}</td>
       <td className="p-3">{url.htmlVersion}</td>
       <td className="p-3">{url.internalLinks}</td>
       <td className="p-3">{url.externalLinks}</td>
