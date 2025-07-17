@@ -63,6 +63,21 @@ func CrawlURL(c *gin.Context) {
 }
 
 func DeleteURLs(c *gin.Context) {
+	var req struct {
+		IDs []uint `json:"ids"`
+	}
+	if err := c.ShouldBindJSON(&req); err != nil || len(req.IDs) == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid IDs"})
+		return
+	}
+
+	err := models.DeleteURLsById(req.IDs)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Delete failed"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "URLs Deleted"})
 }
 
 func ReanalyzeUrls(c *gin.Context) {

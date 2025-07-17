@@ -64,3 +64,9 @@ func UpdateURL(url *URL) error {
 
 	return err
 }
+
+func DeleteURLsById(ids []uint) error {
+	err := DB.Delete(&URL{}, ids).Error
+
+	return err
+}
