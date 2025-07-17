@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"web-crawler-backend/models"
 
 	"github.com/joho/godotenv"
 	"gorm.io/driver/mysql"
@@ -30,6 +31,14 @@ func InitDB() {
 	DB, err = gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
 		log.Fatal("Failed to connect to database:", err)
+	}
+
+	err = DB.AutoMigrate(
+		&models.URL{},
+		&models.BrokenLink{},
+	)
+	if err != nil {
+		log.Fatal("AutoMigrate failed:", err)
 	}
 
 	log.Println("Database connected and migrated successfully")

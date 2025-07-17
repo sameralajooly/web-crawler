@@ -1,0 +1,35 @@
+package models
+
+import (
+	"time"
+
+	"gorm.io/gorm"
+)
+
+var DB *gorm.DB
+
+func SetDB(database *gorm.DB) {
+	DB = database
+}
+
+type URL struct {
+	ID            uint           `json:"id" gorm:"primaryKey"`
+	CreatedAt     time.Time      `json:"createdAt"`
+	UpdatedAt     time.Time      `json:"updatedAt"`
+	DeletedAt     gorm.DeletedAt `json:"deletedAt" gorm:"index"`
+	URL           string         `json:"url"`
+	HTMLVersion   string         `json:"htmlVersion"`
+	Title         string         `json:"title"`
+	H1Count       int            `json:"h1Count"`
+	H2Count       int            `json:"h2Count"`
+	H3Count       int            `json:"h3Count"`
+	H4Count       int            `json:"h4Count"`
+	H5Count       int            `json:"h5Count"`
+	H6Count       int            `json:"h6Count"`
+	InternalLinks int            `json:"internalLinks"`
+	ExternalLinks int            `json:"externalLinks"`
+	HasLoginForm  bool           `json:"hasLoginForm"`
+	Status        string         `json:"status"` // queued, running, done, error
+
+	BrokenLinks []BrokenLink `gorm:"foreignKey:URLID" json:"brokenLinks"`
+}

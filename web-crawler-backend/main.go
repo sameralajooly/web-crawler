@@ -1,17 +1,12 @@
 package main
 
 import (
-	"github.com/gin-gonic/gin"
+	"web-crawler-backend/config"
+	"web-crawler-backend/models"
 )
 
 func main() {
-	r := gin.Default()
+	config.InitDB()
+	models.SetDB(config.DB)
 
-	r.GET("/", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": "Test Gin",
-		})
-	})
-
-	r.Run()
 }
