@@ -1,7 +1,10 @@
 package models
 
 import (
+	"encoding/json"
+	"fmt"
 	"time"
+	"web-crawler-backend/ws"
 
 	"gorm.io/gorm"
 )
@@ -32,6 +35,21 @@ type URL struct {
 	Status        string         `json:"status"` // queued, running, done, error
 
 	BrokenLinks []BrokenLink `gorm:"foreignKey:URLID" json:"brokenLinks"`
+}
+
+func (url *URL) AfterUpdate(tx *gorm.DB) (err error) {
+	go publishWebsocketMessage(url)
+	return
+}
+
+func publishWebsocketMessage(url *URL) {
+	jsonBytes, err := json.Marshal(url)
+	if err != nil {
+		fmt.Println("Error marshalling JSON:", err)
+		return
+	}
+	message := string(jsonBytes)
+	ws.GetHub().Broadcast(message)
 }
 
 func CreateInitURL(address string) (*URL, error) {
