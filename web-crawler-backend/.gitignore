@@ -15,9 +15,6 @@
 # Vendor
 /vendor/
 
-# Dependency files
-go.sum
-
 # Logs
 *.log
 
