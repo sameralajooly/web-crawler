@@ -8,3 +8,8 @@ type BrokenLink struct {
 
 	URL URL `gorm:"foreignKey:URLID"`
 }
+
+func DeleteBrokenLinkByURLId(urlId uint) error {
+	err := DB.Where("url_id = ?", urlId).Delete(BrokenLink{}).Error
+	return err
+}

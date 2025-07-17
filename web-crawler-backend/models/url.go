@@ -59,6 +59,12 @@ func GetURLById(id uint) (*URL, error) {
 	return &url, err
 }
 
+func GetURLByIds(ids []uint) ([]URL, error) {
+	var urls []URL
+	err := DB.Preload("BrokenLinks").Where("id in ?", ids).Find(&urls).Error
+	return urls, err
+}
+
 func UpdateURL(url *URL) error {
 	err := DB.Omit("UpdatedAt", "CreatedAt", "DeletedAt").Save(&url).Error
 

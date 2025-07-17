@@ -81,4 +81,40 @@ func DeleteURLs(c *gin.Context) {
 }
 
 func ReanalyzeUrls(c *gin.Context) {
+	var req struct {
+		IDs []uint `json:"ids"`
+	}
+	if err := c.ShouldBindJSON(&req); err != nil || len(req.IDs) == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid IDs"})
+		return
+	}
+
+	urls, err := models.GetURLByIds(req.IDs)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch URLs"})
+		return
+	}
+
+	for _, url := range urls {
+		url.Status = "queued"
+		err := models.UpdateURL(&url)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update status"})
+			return
+		}
+		if err := models.DeleteBrokenLinkByURLId(url.ID); err != nil {
+			log.Printf("Failed to delete old broken links: %v", err)
+			return
+		}
+	}
+
+	go func(urlsRecords []models.URL) {
+		for _, url := range urlsRecords {
+			services.CrawlURL(&url)
+		}
+
+	}(urls)
+
+	c.JSON(http.StatusOK, gin.H{"message": "Reanalyze started"})
 }
+
