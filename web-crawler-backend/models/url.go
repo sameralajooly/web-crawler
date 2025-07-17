@@ -33,3 +33,22 @@ type URL struct {
 
 	BrokenLinks []BrokenLink `gorm:"foreignKey:URLID" json:"brokenLinks"`
 }
+
+
+func CreateInitURL(address string) (*URL, error) {
+	url := URL{
+		URL:    address,
+		Status: "queued",
+	}
+
+	err := DB.Create(&url).Error
+
+	return &url, err
+}
+
+
+func UpdateURL(url *URL) error {
+	err := DB.Omit("UpdatedAt", "CreatedAt", "DeletedAt").Save(&url).Error
+
+	return err
+}
