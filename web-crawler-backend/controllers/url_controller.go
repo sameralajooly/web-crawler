@@ -3,6 +3,7 @@ package controllers
 import (
 	"log"
 	"net/http"
+	"strconv"
 	"web-crawler-backend/models"
 	"web-crawler-backend/services"
 
@@ -20,6 +21,21 @@ func GetURLs(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusOK, urls)
+}
+func GetURLById(c *gin.Context) {
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.JSON(400, gin.H{"error": "invalid id"})
+		return
+	}
+
+	url, err := models.GetURLById(uint(id))
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "not found"})
+		return
+	}
+
+	c.JSON(http.StatusOK, url)
 }
 
 func CrawlURL(c *gin.Context) {
@@ -44,9 +60,6 @@ func CrawlURL(c *gin.Context) {
 		"message": "Crawl URL started",
 		"data":    url,
 	})
-}
-
-func GetURLById(c *gin.Context) {
 }
 
 func DeleteURLs(c *gin.Context) {
