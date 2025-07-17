@@ -1,0 +1,32 @@
+# Binaries
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+
+# Go build output
+/bin/
+/build/
+/dist/
+
+# Vendor
+/vendor/
+
+# Dependency files
+go.sum
+
+# Logs
+*.log
+
+# IDE folders
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Environment and config files
+.env
+
