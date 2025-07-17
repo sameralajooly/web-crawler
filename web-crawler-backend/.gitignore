@@ -30,3 +30,4 @@ go.sum
 # Environment and config files
 .env
 
+server

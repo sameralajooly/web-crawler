@@ -1,0 +1,37 @@
+services:
+  backend:
+    build:
+      context: ./web-crawler-backend
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    env_file:
+      - ./web-crawler-backend/.env
+    depends_on:
+      - mysql
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./web-crawler-frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:80"
+    restart: unless-stopped
+    
+  mysql:
+    image: mysql:8.0
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - mysql-data:/var/lib/mysql
+    ports:
+      - "33306:3306"
+
+volumes:
+  mysql-data:
+
