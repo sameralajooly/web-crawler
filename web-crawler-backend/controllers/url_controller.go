@@ -14,6 +14,12 @@ type CrawlRequest struct {
 }
 
 func GetURLs(c *gin.Context) {
+	urls, err := models.GetURLs()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "could not fetch URLs"})
+		return
+	}
+	c.JSON(http.StatusOK, urls)
 }
 
 func CrawlURL(c *gin.Context) {

@@ -34,7 +34,6 @@ type URL struct {
 	BrokenLinks []BrokenLink `gorm:"foreignKey:URLID" json:"brokenLinks"`
 }
 
-
 func CreateInitURL(address string) (*URL, error) {
 	url := URL{
 		URL:    address,
@@ -46,6 +45,13 @@ func CreateInitURL(address string) (*URL, error) {
 	return &url, err
 }
 
+func GetURLs() ([]URL, error) {
+	var urls []URL
+
+	err := DB.Preload("BrokenLinks").Find(&urls).Error
+
+	return urls, err
+}
 
 func UpdateURL(url *URL) error {
 	err := DB.Omit("UpdatedAt", "CreatedAt", "DeletedAt").Save(&url).Error
