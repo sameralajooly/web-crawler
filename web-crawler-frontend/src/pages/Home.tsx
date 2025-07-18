@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { crawlUrl, fetchUrls } from "../api";
 import URLForm from "../components/URLForm";
 import type { URLRecord } from "../types/URLtable";
+import { useURLWebSocket } from "../hooks/useURLWebSocket";
 import URLTable from "../components/URLTable/URLTable";
 
 const Home = () => {
@@ -31,6 +32,10 @@ const Home = () => {
       throw err;
     }
   };
+
+  useURLWebSocket((msg: URLRecord) => {
+    setUrls((prev) => prev.map((url) => (url.id === msg.id ? msg : url)));
+  });
 
   useEffect(() => {
     loadUrls();
